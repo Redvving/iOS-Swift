@@ -1,0 +1,88 @@
+//使用 if 和 switch 作为条件控制
+//使用 for-in 、 for 、 while 、 do-while 作为循环
+//小括号不是必须的，但主体的大括号是必需的
+let individualScores = [75, 43, 103, 87, 12] 
+var teamScore = 0 
+for score in individualScores { 
+    if score > 50 { 
+        teamScores += 3 
+    } else { 
+        teamScores += 1 
+    } 
+} 
+
+
+//在 if 语句中，条件必须是布尔表达式，这意味着 if score { … } 是错误的，不能隐含的与0比较
+//你可以一起使用 if 和 let 来防止值的丢失
+//这些值是可选的。可选值可以包含一个值或包含一个 nil 来指定值还不存在
+//写一个问号 “?” 在类型后表示值是可选的。
+//如果可选值为 nil ，条件就是 false 大括号中的代码会被跳过
+//否则可选值未包装并赋值为一个常量，会是的未包装值的变量到代码块中
+var optionalString: String? = "Hello" 
+optionalString == nil 
+  
+var optionalName: String? = "John Appleseed" 
+var greeting = "Hello!" 
+if let name = optionalName { 
+    greeting = "Hello, \(name)" 
+} 
+
+
+//switch 支持多种数据以及多种比较，不限制必须是整数和测试相等
+//在执行匹配的情况后，程序会从 switch 跳出，而不是继续执行下一个情况。所以不再需要 break 跳出 switch
+let vegetable = "red pepper" 
+switch vegetable { 
+case "celery": 
+    let vegetableComment = "Add some raisins and make ants on a log." 
+case "cucumber", "watercress": 
+    let vegetableComment = "That would make a good tea sandwich." 
+case let x where x.hasSuffix("pepper"): 
+    let vegetableComment = "Is it a spicy \(x)?" 
+default:    //by gashero 
+    let vegetableComment = "Everything tastes good in soup." 
+}
+
+
+//可使用 for-in 来迭代字典中的每个元素，提供一对名字来使用每个键值对。
+let interestingNumbers = [ 
+    "Prime": [2, 3, 5, 7, 11, 13], 
+    "Fibonacci": [1, 1, 2, 3, 5, 8], 
+    "Square": [1, 4, 9, 16, 25], 
+] 
+var largest = 0 
+for (kind, numbers) in interestingNumbers { 
+    for number in numbers { 
+        if number > largest { 
+            largest = number 
+        } 
+    } 
+} 
+
+
+//使用 while 来重复执行代码块直到条件改变。循环的条件可以放在末尾来确保循环至少执行一次
+var n = 2 
+while n < 100 { 
+    n = n * 2 
+} 
+n 
+  
+var m = 2 
+do { 
+    m = m * 2 
+} while m < 100 
+m 
+ 
+ 
+//你可以在循环中保持一个索引，通过 “..” 来表示索引范围或明确声明一个初始值、条件、增量。这两个循环做相同的事情:
+var firstForLoop = 0 
+for i in 0..3 { 
+    firstForLoop += i 
+} 
+firstForLoop 
+  
+var secondForLoop = 0 
+for var i = 0; i < 3; ++i { 
+    secondForLoop += 1 
+} 
+//secondForLoop 
+//使用 .. 构造范围忽略最高值，而用 … 构造的范围则包含两个值。
