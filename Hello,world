@@ -2,4 +2,6 @@ iOS-Swift
 =========
 
 //Hello,world
+//无需导入(import)一个单独的库供输入输出和字符串处理
+//全局范围的代码就是用于程序的入口，无需编写一main()个函数，也无需在每个语句后加分号
 printIn("Hello,world")
