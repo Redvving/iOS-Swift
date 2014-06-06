@@ -1,0 +1,144 @@
+//使用 class 可以创建一个类
+//一个属性的声明则是在类里作为常量或变量声明的，除了是在类的上下文中
+//方法和函数也是这么写的
+class Shape { 
+    var numberOfSides = 0 
+    func simpleDescription() -> String { 
+        return "A shape with \(numberOfSides) sides." 
+    } 
+} 
+
+//通过在类名后加小括号来创建类的实例
+//使用点语法来访问实例的属性和方法
+var shape = Shape() 
+shape.numberOfSides = 7 
+var shapeDescription = shape.simpleDescription() 
+ 
+//这个版本的 Shape 类有些重要的东西不在：一个构造器来在创建实例时设置类
+//使用 init 来创建一个
+class NamedShape { 
+    var numberOfSides: Int = 0 
+    var name: String 
+  
+    init(name: String) { 
+        self.name = name 
+    }   //by gashero 
+  
+    func simpleDescription() -> String { 
+        return "A Shape with \(numberOfSides) sides." 
+    } 
+} 
+ 
+//注意
+//self 用来区分 name 属性和 name 参数
+//构造器的生命跟函数一样，除了会创建类的实例
+//每个属性都需要赋值，无论在声明里还是在构造器里。
+ 
+//使用 deinit 来创建一个析构器，来执行对象销毁时的清理工作
+//子类包括其超类的名字，以冒号分隔
+//在继承标准根类时无需声明，所以你可以忽略超类
+//子类的方法可以通过标记 override 重载超类中的实现，而没有 override 的会被编译器看作是错误
+//编译器也会检查那些没有被重载的方法
+class Square: NamedShape { 
+    var sideLength: Double 
+  
+    init(sideLength: Double, name: String) { 
+        self.sideLength = sideLength 
+        super.init(name: name) 
+        numberOfSides = 4 
+    } 
+  
+    func area() -> Double { 
+        return sideLength * sideLength 
+    } 
+  
+    override func simpleDescription() -> String { 
+        return "A square with sides of length \(sideLength)." 
+    } 
+} 
+  
+let test = Square(sideLength: 5.2, name: "my test square") 
+test.area() 
+test.simpleDescription() 
+
+//属性可以有 getter 和 setter 
+class EquilateralTriangle: NamedShape { 
+    var sideLength: Double = 0.0 
+  
+    init(sideLength: Double, name: String) { 
+        self.sideLength = sideLength 
+        super.init(name: name) 
+        numberOfSides = 3 
+    } 
+  
+    var perimeter: Double { 
+    get { 
+        return 3.0 * sideLength 
+    } 
+    set { 
+        sideLength = newValue / 3.0 
+    } 
+    } 
+  
+    override func simpleDescription() -> String { 
+        return "An equilateral triangle with sides of length \(sideLength)." 
+    } 
+} 
+  
+var triangle = EquilateralTriangle(sideLength: 3.1, name: "a triangle") 
+triangle.perimeter 
+triangle.perimeter = 9.9 
+triangle.sideLength 
+ 
+//在 perimeter 的 setter 中，新的值的名字就是 newValue 
+//你可以提供一个在 set 之后提供一个不冲突的名字
+ 
+//注意 EquilateralTriangle 的构造器有3个不同的步骤：
+//1、设置属性的值
+//2、调用超类的构造器
+//3、改变超类定义的属性的值，添加附加的工作来使用方法、getter、setter也可以在这里
+ 
+//如果你不需要计算属性，但是仍然要提供在设置值之后执行工作，使用 willSet 和 didSet
+//例如，下面的类要保证其三角的边长等于矩形的变长
+class TriangleAndSquare { 
+    var triangle: EquilaterTriangle { 
+    willSet { 
+        square.sideLength = newValue.sideLength 
+    } 
+    } 
+  
+    var square: Square { 
+    willSet { 
+        triangle.sideLength = newValue.sideLength 
+    } 
+    } 
+  
+    init(size: Double, name: String) { 
+        square = Square(sideLength: size, name: name) 
+        triangle = EquilaterTriangle(sideLength: size, name: name) 
+    } 
+} 
+var triangleAndSquare = TriangleAndSquare(size: 10, name: "another test shape") 
+triangleAndSquare.square.sideLength 
+triangleAndSquare.triangle.sideLength 
+triangleAndSquare.square = Square(sideLength: 50, name: "larger square") 
+triangleAndSquare.triangle.sideLength 
+ 
+//类的方法与函数有个重要的区别
+//函数的参数名仅用与函数，但方法的参数名也可以用于调用方法(除了第一个参数)
+//缺省时，一个方法有一个同名的参数，调用时就是参数本身
+//你可以指定第二个名字，在方法内部使用
+class Counter { 
+    var count: Int = 0 
+    func incrementBy(amount: Int, numberOfTimes times: Int) { 
+        count += amount * times 
+    } 
+} 
+var counter = Counter() 
+counter.incrementBy(2, numberOfTimes: 7) 
+ 
+//当与可选值一起工作时，你可以写 “?” 到操作符之前类似于方法属性
+//如果值在”?”之前就已经是 nil ，所有在 “?” 之后的都会自动忽略，而整个表达式是 nil 
+//另外，可选值是未包装的，所有 “?” 之后的都作为未包装的值。在两种情况中，整个表达式的值是可选值
+let optionalSquare: Square? = Square(sideLength: 2.5, name: "optional square") 
+let sideLength = optionalSquare?.sideLength 
