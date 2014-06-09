@@ -58,35 +58,6 @@ case Result(String, String)
 case Error(String)
 }
 ￼
-
-￼
-
-￼
-
-￼
-
-￼
-
-￼
-
-￼
-
-￼
-
-￼
-
-￼
-
-￼
-
-￼
-
-￼
-
-￥58.00
-
-
-
 let success = ServerResponse.Result("6:00 am", "8:09 pm")
 let failure = ServerResponse.Error("Out of cheese.")
 switch success {
