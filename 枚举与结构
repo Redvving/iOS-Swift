@@ -1,0 +1,101 @@
+使用 enum 来创建枚举。有如类和其他命名类型，枚举可以有方法。
+enum Rank: Int {
+case Ace = 1 case Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten case Jack, Queen, King
+func simpleDescrition() -> String {
+switch self {
+case .Ace: return "ace"
+case .Jack: return "jack"
+case .Queen: return "queen"
+case .King: return "king"
+default: return String(self.toRaw())
+}
+}
+}
+let ace = Rank.Ace //by gashero
+let aceRawValue = ace.toRaw()
+Note
+练习
+编写一个函数比较两个 Rank 的值，通过比较其原始值。
+在如上例子中，原始值的类型是 Int 所以可以只指定第一个原始值。其后的原始值都是按照顺序赋值的。也可以使用字符串或浮点数作为枚举的原始值。
+使用 toRaw 和 fromRaw 函数可以转换原始值和枚举值。
+if let convertedRank = Rank.fromRaw(3) { let threeDescription = convertedRank.simpleDescription() }
+枚举的成员值就是实际值，而不是其他方式写的原始值。实际上，有些情况是原始值，就是你不提供的时候。
+enum Suit {
+case Spades, Hearts, Diamonds, Clubs
+func simpleDescription() -> String {
+switch self {
+case .Spades: return "spades"
+case .Hearts: return "hearts"
+case .Diamonds: return "dismonds"
+case .Clubs: return "clubs"
+}
+}
+}
+let hearts = Suit.Hearts //by gashero
+let heartsDescription = hearts.simpleDescription()
+Note
+练习
+添加一个 color 方法到 Suit 并在 spades 和 clubs 时返回 "black" ，并且给 hearts 和 diamounds 返回 "red" 。
+注意上面引用Hearts成员的两种方法：当赋值到 hearts 常量时，枚举成员 Suit.Hearts 通过全名引用，因为常量没有明确的类型。在 switch 中，枚举通过 .Hearts 引用，因为 self 的值是已知的。你可以在任何时候使用方便的方法。
+使用 struct 创建结构体。结构体支持多个与类相同的行为，包括方法和构造器。一大重要的区别是代码之间的传递总是用拷贝(值传递)，而类则是传递引用。
+struct Card {
+var rank: Rank
+var suit: Suit
+func simpleDescription() -> String {
+return "The (rank.simpleDescription()) of
+(suit.simpleDescription())"
+}
+}
+let threeOfSpades = Card(rank: .Three, suit: .Spades)
+let threeOfSpadesDescription = threeOfSpades.simpleDescription()
+Note
+练习
+添加方法到 Card 类来创建一桌的纸牌，每个纸牌都有合并的rank和suit。(就是个打字员的活二，by gashero)。
+一个枚举的实例成员可以拥有实例的值。相同枚举成员实例可以有不同的值。你在创建实例时赋值。指定值和原始值的区别：枚举的原始值与其实例相同，你在定义枚举时提供原始值。
+例如，假设情况需要从服务器获取太阳升起和降落时间。服务器可以响应相同的信息或一些错误信息。
+enum ServerResponse {
+case Result(String, String)
+case Error(String)
+}
+￼
+
+￼
+
+￼
+
+￼
+
+￼
+
+￼
+
+￼
+
+￼
+
+￼
+
+￼
+
+￼
+
+￼
+
+￼
+
+￥58.00
+
+
+
+let success = ServerResponse.Result("6:00 am", "8:09 pm")
+let failure = ServerResponse.Error("Out of cheese.")
+switch success {
+case let .Result(sunrise, sunset):
+let serverResponse = "Sunrise is at (sunrise) and sunset is at (sunset)."
+case let .Error(error):
+let serverResponse = "Failure... (error)"
+}
+Note
+练习
+给 ServerResponse 添加第三种情况来选择。
+注意日出和日落时间实际上来自于对 ServerResponse 的部分匹配来选择的。
